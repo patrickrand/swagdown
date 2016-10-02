@@ -1,14 +1,14 @@
 package swagger
 
-import "io"
-
-func Encode(w io.Writer, api *API) error {
-	return nil
-}
+import (
+	"encoding/json"
+	"io"
+)
 
 func Decode(r io.Reader) (*API, error) {
-
-	return nil, nil
+	var api *API
+	err := json.NewDecoder(r).Decode(api)
+	return api, err
 }
 
 type API struct {
