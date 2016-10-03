@@ -6,14 +6,14 @@ import (
 )
 
 func Decode(r io.Reader) (*API, error) {
-	var api *API
-	err := json.NewDecoder(r).Decode(api)
-	return api, err
+	var api API
+	err := json.NewDecoder(r).Decode(&api)
+	return &api, err
 }
 
 type API struct {
 	Swagger  string          `json:"swagger"`
-	Info     string          `json:"info"`
+	Info     Info            `json:"info"`
 	Host     string          `json:"host"`
 	BasePath string          `json:"basePath"`
 	Schemes  []string        `json:"schemes"`
@@ -44,18 +44,18 @@ type Response struct {
 }
 
 type Schema struct {
-	Type  string            `json:"type"`
-	Items map[string]string `json:"items"`
+	Type  string                 `json:"type"`
+	Items map[string]interface{} `json:"items"`
 }
 
 type Parameter struct {
-	Name             string            `json:"name"`
-	In               string            `json:"in"`
-	Description      string            `json:"description"`
-	Required         bool              `json:"required`
-	Type             string            `json:"type"`
-	CollectionFormat string            `json:"collectionFormat"`
-	Items            map[string]string `json:"items"`
+	Name             string                 `json:"name"`
+	In               string                 `json:"in"`
+	Description      string                 `json:"description"`
+	Required         bool                   `json:"required`
+	Type             string                 `json:"type"`
+	CollectionFormat string                 `json:"collectionFormat"`
+	Items            map[string]interface{} `json:"items"`
 }
 
 type Info struct {

@@ -1,10 +1,8 @@
-{{define "api"}}
+# {{.Info.Title}} v{{.Info.Version}} 
+{{.Info.Description}}
 
-# {{.API.Info.Title}} v{{.API.Info.Version}} 
-{{.API.Info.Description}}
-
-* Host: `{{.API.Host}}`
-* Base Path: `{{.API.BasePath}}`
+* Host: `{{.Host}}`
+* Base Path: `{{.BasePath}}`
 
 ## GET /api/pets 
 
@@ -24,5 +22,3 @@ Description...
  }
  ```
 
-
-{{end}}
