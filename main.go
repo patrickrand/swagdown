@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -8,7 +9,16 @@ import (
 )
 
 func main() {
-	f, err := os.Open("./petstore/petstore-expanded.json")
+	if len(os.Args) != 2 {
+		exit(errors.New("swagdown requires exactly one argument, a path to a local swagger.json file"))
+	}
+
+	filename := os.Args[1]
+	if filename == "test" {
+		filename = "./swagger/petstore/petstore-expanded.json"
+	}
+
+	f, err := os.Open(filename)
 	if err != nil {
 		exit(err)
 	}

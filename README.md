@@ -6,7 +6,9 @@ Swagdown is a Golang library and CLI for generating markdown documentation from 
 ### Usage
 
 ```bash
-go get github.com/patrickrand/swagdown
+$ go get github.com/patrickrand/swagdown
+
+$ swagdown <path>/<to>/swagger.json
 ```
 
 ### References
