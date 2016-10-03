@@ -4,9 +4,12 @@
 * Host: `{{.Host}}`
 * Base Path: `{{.BasePath}}`
 
-## GET /api/pets 
+{{range $uri, $path := .Paths}}
 
-Description...
+{{with $op := $path.Get}}
+## GET {{$uri}}
+
+{{$op.Description}}
 
 #### Query Parameters
 
@@ -21,4 +24,5 @@ Description...
 
  }
  ```
-
+{{end}} 
+{{end}}
