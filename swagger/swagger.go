@@ -12,24 +12,26 @@ func Decode(r io.Reader) (*API, error) {
 }
 
 type API struct {
-	Swagger  string          `json:"swagger"`
-	Info     Info            `json:"info"`
-	Host     string          `json:"host"`
-	BasePath string          `json:"basePath"`
-	Schemes  []string        `json:"schemes"`
-	Consumes []string        `json:"consumes"`
-	Produces []string        `json:"produces"`
-	Paths    map[string]Path `json:"paths"`
+	Swagger  string                `json:"swagger"`
+	Info     Info                  `json:"info"`
+	Host     string                `json:"host"`
+	BasePath string                `json:"basePath"`
+	Schemes  []string              `json:"schemes"`
+	Consumes []string              `json:"consumes"`
+	Produces []string              `json:"produces"`
+	Paths    map[string]Operations `json:"paths"`
 }
 
-type Path struct {
-	Get    *Operation `json:"get"`
-	Post   *Operation `json:"post"`
-	Put    *Operation `json:"put"`
-	Patch  *Operation `json:"patch"`
-	Delete *Operation `json:"delete"`
-	Head   *Operation `json:"head"`
-}
+type Operations map[string]*Operation
+
+// type Method struct {
+// 	Get    *Operation `json:"get"`
+// 	Post   *Operation `json:"post"`
+// 	Put    *Operation `json:"put"`
+// 	Patch  *Operation `json:"patch"`
+// 	Delete *Operation `json:"delete"`
+// 	Head   *Operation `json:"head"`
+// }
 
 type Operation struct {
 	Description string              `json:"description"`
