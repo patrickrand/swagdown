@@ -1,14 +1,17 @@
 # swagdown
-Swagdown is a Golang library and CLI for generating markdown documentation from a Swagger spec. 
+`swagdown` is a Golang library and CLI for generating markdown documentation from JSON or YAML Swagger files. 
 
-> WIP (2016-10-03)
+> WIP (2016-10-04)
 
 ### Usage
 
-```bash
-go get github.com/patrickrand/swagdown
+#### CLI
 
-swagdown <path>/<to>/swagger.json
+```bash
+$ go get github.com/patrickrand/swagdown
+
+$ swagdown <path>/<to>/swagger.json 
+
 ```
 
 ### References

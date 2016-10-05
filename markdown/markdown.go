@@ -1,39 +1,36 @@
 package markdown
 
 import (
+	"bytes"
 	"io"
 	"os"
 	"path/filepath"
-	"strings"
 	"text/template"
 
 	"github.com/patrickrand/swagdown/swagger"
 )
 
-var SwagdownTemplates = filepath.Join(os.Getenv("GOPATH"), "src/github.com/patrickrand/swagdown/markdown/templates/*")
+var (
+	SwagdownTemplates = filepath.Join(os.Getenv("GOPATH"), "src/github.com/patrickrand/swagdown/markdown/templates/*")
+	funcMap           = template.FuncMap{"FilterParameters": swagger.FilterParameters}
+	tmpl              = template.Must(template.New("outer.md").Funcs(funcMap).ParseGlob(SwagdownTemplates))
+)
 
-// just kidding around... will refactor later
-var tmpl = template.Must(template.New("outer.md").Funcs(template.FuncMap{
-	"ToUpper": strings.ToUpper,
-	"Capitalize": func(s string) string {
-		if len(s) == 0 {
-			return s
-		}
-		return strings.ToUpper(string(s[0])) + s[1:]
-	},
-	"FilterParameters": func(params []swagger.Parameter, t string) []swagger.Parameter {
-		var results []swagger.Parameter
-		for _, param := range params {
-			if strings.ToLower(param.In) == t {
-				results = append(results, param)
-			}
-		}
-		return results
-	},
-}).ParseGlob(SwagdownTemplates))
+func RenderFromJSON(w io.Writer, r io.Reader) error {
+	return render(w, r, swagger.DecodeJSON)
+}
 
-func Render(w io.Writer, r io.Reader) error {
-	api, err := swagger.DecodeJSON(r)
+func RenderFromYAML(w io.Writer, r io.Reader) error {
+	return render(w, r, swagger.DecodeYAML)
+}
+
+func render(w io.Writer, r io.Reader, decode func(data []byte) (*swagger.API, error)) error {
+	buf := new(bytes.Buffer)
+	if _, err := buf.ReadFrom(r); err != nil {
+		return err
+	}
+
+	api, err := decode(buf.Bytes())
 	if err != nil {
 		return err
 	}

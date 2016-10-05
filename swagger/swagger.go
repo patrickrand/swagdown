@@ -2,78 +2,96 @@ package swagger
 
 import (
 	"encoding/json"
-	"io"
+	"strings"
+
+	"gopkg.in/yaml.v2"
 )
 
-func DecodeJSON(r io.Reader) (*API, error) {
+func DecodeJSON(data []byte) (*API, error) {
 	var api API
-	err := json.NewDecoder(r).Decode(&api)
+	err := json.Unmarshal(data, &api)
 	return &api, err
 }
 
+func DecodeYAML(data []byte) (*API, error) {
+	var api API
+	err := yaml.Unmarshal(data, &api)
+	return &api, err
+}
+
+func FilterParameters(params []Parameter, t string) []Parameter {
+	var results []Parameter
+	for _, param := range params {
+		if strings.ToLower(param.In) == t {
+			results = append(results, param)
+		}
+	}
+	return results
+}
+
 type API struct {
-	Swagger  string             `json:"swagger"`
-	Info     Info               `json:"info"`
-	Host     string             `json:"host"`
-	BasePath string             `json:"basePath"`
-	Schemes  []string           `json:"schemes"`
-	Consumes []string           `json:"consumes"`
-	Produces []string           `json:"produces"`
-	Paths    map[string]Methods `json:"paths"`
+	Swagger  string             `json,yaml:"swagger"`
+	Info     Info               `json,yaml:"info"`
+	Host     string             `json,yaml:"host"`
+	BasePath string             `json,yaml:"basePath"`
+	Schemes  []string           `json,yaml:"schemes"`
+	Consumes []string           `json,yaml:"consumes"`
+	Produces []string           `json,yaml:"produces"`
+	Paths    map[string]Methods `json,yaml:"paths"`
 }
 
 type Methods struct {
-	Get    *Operation `json:"get"`
-	Post   *Operation `json:"post"`
-	Put    *Operation `json:"put"`
-	Patch  *Operation `json:"patch"`
-	Delete *Operation `json:"delete"`
-	Head   *Operation `json:"head"`
+	Get    *Operation `json,yaml:"get"`
+	Post   *Operation `json,yaml:"post"`
+	Put    *Operation `json,yaml:"put"`
+	Patch  *Operation `json,yaml:"patch"`
+	Delete *Operation `json,yaml:"delete"`
+	Head   *Operation `json,yaml:"head"`
 }
 
 type Operation struct {
-	Description string              `json:"description"`
-	OperationID string              `json:"operationId"`
-	Parameters  []Parameter         `json:"parameters"`
-	Responses   map[string]Response `json:"responses"`
+	Description string              `json,yaml:"description"`
+	OperationID string              `json,yaml:"operationId"`
+	Parameters  []Parameter         `json,yaml:"parameters"`
+	Responses   map[string]Response `json,yaml:"responses"`
 }
 
 type Response struct {
-	Description string `json:"description"`
-	Schema      Schema `json:"schema"`
+	Description string `json,yaml:"description"`
+	Schema      Schema `json,yaml:"schema"`
 }
 
 type Schema struct {
-	Type  string                 `json:"type"`
-	Items map[string]interface{} `json:"items"`
+	Type  string                 `json,yaml:"type"`
+	Items map[string]interface{} `json,yaml:"items"`
 }
 
 type Parameter struct {
-	Name             string                 `json:"name"`
-	In               string                 `json:"in"`
-	Description      string                 `json:"description"`
-	Required         bool                   `json:"required"`
-	Type             string                 `json:"type"`
-	CollectionFormat string                 `json:"collectionFormat"`
-	Items            map[string]interface{} `json:"items"`
+	Name             string                 `json,yaml:"name"`
+	In               string                 `json,yaml:"in"`
+	Description      string                 `json,yaml:"description"`
+	Required         bool                   `json,yaml:"required"`
+	Type             string                 `json,yaml:"type"`
+	CollectionFormat string                 `json,yaml:"collectionFormat"`
+	Items            map[string]interface{} `json,yaml:"items"`
 }
 
 type Info struct {
-	Version        string  `json:"version"`
-	Title          string  `json:"title"`
-	Description    string  `json:"description"`
-	TermsOfService string  `json:"termsOfService"`
-	Contact        Contact `json:"contact"`
-	License        License `json:"license"`
+	Version        string  `json,yaml:"version"`
+	Title          string  `json,yaml:"title"`
+	Description    string  `json,yaml:"description"`
+	TermsOfService string  `json,yaml:"termsOfService"`
+	Contact        Contact `json,yaml:"contact"`
+	License        License `json,yaml:"license"`
 }
 
 type Contact struct {
-	Name  string `json:"name"`
-	Email string `json:"email"`
-	URL   string `json:"url"`
+	Name  string `json,yaml:"name"`
+	Email string `json,yaml:"email"`
+	URL   string `json,yaml:"url"`
 }
 
 type License struct {
-	Name string `json:"name"`
-	URL  string `json:"url"`
+	Name string `json,yaml:"name"`
+	URL  string `json,yaml:"url"`
 }
