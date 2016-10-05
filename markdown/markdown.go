@@ -33,7 +33,7 @@ var tmpl = template.Must(template.New("outer.md").Funcs(template.FuncMap{
 }).ParseGlob(SwagdownTemplates))
 
 func Render(w io.Writer, r io.Reader) error {
-	api, err := swagger.Decode(r)
+	api, err := swagger.DecodeJSON(r)
 	if err != nil {
 		return err
 	}
